@@ -1,6 +1,6 @@
 <ui version="4.0">
- <class>ImageElement</class>
- <widget class="QDialog" name="ImageElement">
+ <class>ChallangeTwo</class>
+ <widget name="ChallangeTwo" class="QDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
