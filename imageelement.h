@@ -1,22 +1,34 @@
 #ifndef IMAGEELEMENT_H
 #define IMAGEELEMENT_H
 
-#include <QDialog>
+#include <QWidget>
+#include <core.hpp>
+#include <highgui.hpp>
+#include <imgproc.hpp>
+#include <string>
 
-namespace Ui {
-class ImageElement;
-}
+#include <QDebug>
 
-class ImageElement : public QDialog
+using namespace cv;
+
+class ImageElement : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ImageElement(QWidget *parent = 0);
+    explicit ImageElement(std::string title, std::string path, QWidget *parent = 0);
+    ImageElement(std::string title, const Mat& I, QWidget *parent = 0);
     ~ImageElement();
+    void showImageElement();
+
+protected:
+    virtual void paintEvent(QPaintEvent *event);
 
 private:
-    Ui::ImageElement *ui;
+    std::string heading, filename;
+    QImage _qimage;
+    Mat _cvImage;
+    Mat image;
 };
 
 #endif // IMAGEELEMENT_H

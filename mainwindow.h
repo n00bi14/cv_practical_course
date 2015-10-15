@@ -1,7 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDebug>
 #include <QMainWindow>
+#include <QMessageBox>
+#include <string>
+#include "challangeone.h"
+#include "challangetwo.h"
+#include "challangethree.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +23,15 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+ private slots:
+    void executeAufgabe1();
+    void executeAufgabe2a();
+    void executeAufgabe2b();
+    void executeAufgabe2c();
+    void executeAufgabe2d();
+    void executeAufgabe3();
+    void exit();
 };
 
 #endif // MAINWINDOW_H
