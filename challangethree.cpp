@@ -26,7 +26,6 @@ ChallangeThree::ChallangeThree(string filename, string resultPath, QWidget *pare
     ImageProcessing::resizeMax512(image, this->I);
     this->I.copyTo(this->processedImage);
 
-    qDebug() << &I << "\t" << &processedImage;
 
     ImageElement* original = new ImageElement("Originalbild", filename);
     processed = new ImageElement("Bearbeites Bild", this->processedImage);
@@ -78,8 +77,13 @@ void ChallangeThree::calculateAllFilters()
     this->processed->hide();
     hLayout->removeWidget(this->processed);
 
-    ImageProcessing::stretchImage(this->I, this->processedImage, this->txt_stretching->text().toInt());
-    ImageProcessing::correktGammaValue(this->processedImage, this->processedImage, this->txt_gammakorrektur->text().toDouble());
+    if(this->txt_stretching->text().toInt() != 0)
+        ImageProcessing::stretchImage(this->I, this->processedImage, this->txt_stretching->text().toInt());
+    else
+        this->I.copyTo(this->processedImage);
+
+    if(this->txt_gammakorrektur->text().toDouble() != 0)
+        ImageProcessing::correktGammaValue(this->processedImage, this->processedImage, this->txt_gammakorrektur->text().toDouble(), this->txt_stretching->text().toInt());
 
     if(chk_linearisierung->isChecked())
         equalizeHist(this->processedImage, this->processedImage);

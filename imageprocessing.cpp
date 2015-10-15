@@ -142,6 +142,43 @@ void ImageProcessing::stretchImage(InputArray src, OutputArray dst, int saturati
 }
 
 
-void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double value){
+void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double gammaValue, int saturation){
+    Mat I;
+    Mat hist;
 
+    src.getMat().copyTo(I);
+
+    int histSize = 255;
+    float range[] = {0, 255};
+    const float* histRange = {range};
+
+    cv::calcHist(&I, 1, 0, cv::Mat(), hist, 1, &histSize, &histRange, true, false);
+
+    int threshold = int(2.55 * saturation);
+    int gmin = 0;
+    int gmax = 0;
+
+    for(gmin = 0; gmin < hist.rows; gmin++)
+        if(hist.data[gmin] < threshold)
+            hist.data[gmin] = 0;
+        else
+            break;
+
+    for(gmax = hist.rows; gmax > 0 ; gmax--)
+        if(hist.data[gmax] < threshold)
+            hist.data[gmax] = 0;
+        else
+            break;
+
+    int wmin = 0;
+    int wmax = 255;
+
+    qDebug() << gmax << "\t" << gmin << "\t" << gammaValue;
+
+    float d = wmax + wmin;
+    float g = gmax - gmin;
+    for(int i = 0; i < I.rows * I.cols; i++)
+        I.data[i] = d - wmin * std::pow(((I.data[i] - gmin) / g), gammaValue);
+
+    I.copyTo(dst);
 }

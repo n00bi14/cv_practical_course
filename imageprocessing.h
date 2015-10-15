@@ -23,7 +23,8 @@ public:
     static vector<Mat> convertToYIQ(Mat& src);
     static void convertToLab(InputArray src, OutputArray dst);
     static void stretchImage(InputArray src, OutputArray dst, int saturation);
-    static void correktGammaValue(InputArray src, OutputArray dst, double value);
+    static void correktGammaValue(InputArray src, OutputArray dst, double gammaValue, int saturation);
+
 };
 
 #endif // IMAGEPROCESSING_H
