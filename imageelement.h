@@ -2,9 +2,12 @@
 #define IMAGEELEMENT_H
 
 #include <QWidget>
+
+
 #include <core.hpp>
 #include <highgui.hpp>
 #include <imgproc.hpp>
+
 #include <string>
 
 #include <QDebug>

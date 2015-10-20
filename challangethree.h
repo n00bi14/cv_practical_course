@@ -7,6 +7,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QFileDialog>
 
 #include <vector>
 
@@ -34,6 +35,7 @@ private:
     Mat I, processedImage;
 
     ImageElement* processed;
+    ImageElement* original;
 
     QSlider* slider_stretching;
     QSlider* slider_gammakorrektur;
@@ -47,6 +49,8 @@ private slots:
     void setStretchedValue(int value);
     void setGammakorrekturValue(int value);
     void linearisierungChecked(bool);
+
+    void openFile();
 };
 
 #endif // CHALLANGETHREE_H

@@ -173,12 +173,17 @@ void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double 
     int wmin = 0;
     int wmax = 255;
 
-    qDebug() << gmax << "\t" << gmin << "\t" << gammaValue;
+//    qDebug() << gmax << "\t" << gmin << "\t" << gammaValue;
 
     float d = wmax + wmin;
     float g = gmax - gmin;
+
+//    qDebug() << d << "\t" << g;
+
     for(int i = 0; i < I.rows * I.cols; i++)
+    {
         I.data[i] = d - wmin * std::pow(((I.data[i] - gmin) / g), gammaValue);
+    }
 
     I.copyTo(dst);
 }

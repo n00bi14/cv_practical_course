@@ -15,9 +15,13 @@ ChallangeThree::ChallangeThree(string filename, string resultPath, QWidget *pare
 
     chk_linearisierung = findChild<QCheckBox*>("chk_linearisierung");
 
+    QPushButton* btn_openFile = findChild<QPushButton*>("btn_openFile");
+
     connect(slider_stretching, SIGNAL(valueChanged(int)), this, SLOT(setStretchedValue(int)));
     connect(slider_gammakorrektur, SIGNAL(valueChanged(int)), this, SLOT(setGammakorrekturValue(int)));
     connect(chk_linearisierung, SIGNAL(clicked(bool)), this, SLOT(linearisierungChecked(bool)));
+
+    connect(btn_openFile, SIGNAL(clicked()), this, SLOT(openFile()));
 
     txt_stretching->setText(QString::number(slider_stretching->value()));
     txt_gammakorrektur->setText(QString::number(slider_gammakorrektur->value()));
@@ -27,7 +31,7 @@ ChallangeThree::ChallangeThree(string filename, string resultPath, QWidget *pare
     this->I.copyTo(this->processedImage);
 
 
-    ImageElement* original = new ImageElement("Originalbild", filename);
+    original = new ImageElement("Originalbild", filename);
     processed = new ImageElement("Bearbeites Bild", this->processedImage);
 
     QHBoxLayout *hLayout = findChild<QHBoxLayout*>("hLayout");
@@ -94,6 +98,38 @@ void ChallangeThree::calculateAllFilters()
     processed->showImageElement();
 
     hLayout->addWidget(this->processed);
+
+    this->repaint();
+}
+
+void ChallangeThree::openFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "");
+    this->filename = fileName.toStdString();
+
+
+
+    QHBoxLayout *hLayout = findChild<QHBoxLayout*>("hLayout");
+
+    hLayout->removeWidget(processed);
+    hLayout->removeWidget(original);
+
+    this->repaint();
+
+    Mat image = imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
+    ImageProcessing::resizeMax512(image, this->I);
+    this->I.copyTo(this->processedImage);
+
+
+    original = new ImageElement("Originalbild", this->I);
+    processed = new ImageElement("Bearbeites Bild", this->processedImage);
+
+
+    hLayout->addWidget(original);
+    hLayout->addWidget(processed);
+
+    original->showImageElement();
+    processed->showImageElement();
 
     this->repaint();
 }
