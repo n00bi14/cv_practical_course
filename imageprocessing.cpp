@@ -99,32 +99,22 @@ void ImageProcessing::convertToLab(InputArray src, OutputArray dst){
 
 void ImageProcessing::stretchImage(InputArray src, OutputArray dst, int saturation){
     Mat I;
-    Mat hist;
 
     src.getMat().copyTo(I);
 
-    int histSize = 255;
-    float range[] = { 0, 255 } ;
-    const float* histRange = { range };
-
-
-    calcHist( &I, 1, 0, Mat(), hist, 1, &histSize, &histRange, true, false );
-
-//    for(int i = 0; i < hist.rows; i++)
-//            qDebug() << i << ": " << hist.data[i];
 
     int threshold = int(2.55 * saturation);
     int gmin = threshold;
     int gmax = 255 - threshold;
 
-    int wmin = 0;
-    int wmax = 255;
 
+    double d = 255 / (gmax - gmin);
+    int size = (I.cols * I.rows);
 
-    float d = (wmax - wmin) / (gmax - gmin);
-    int size = I.cols * I.rows;
-    for(int i = 0; i < size; i++)
-        I.data[i] = (I.data[i] - gmin) * d;// + wmin;
+    for(int i = 0; i < size; i++){
+        uchar pixel = (I.data[i]);
+        I.data[i] = CV_CAST_8U((int)((pixel - gmin) * d));
+    }
 
     I.copyTo(dst);
 }
@@ -132,33 +122,21 @@ void ImageProcessing::stretchImage(InputArray src, OutputArray dst, int saturati
 
 void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double gammaValue, int saturation){
     Mat I;
-    Mat hist;
 
     src.getMat().copyTo(I);
 
-    int histSize = 255;
-    float range[] = {0, 255};
-    const float* histRange = {range};
-
-    cv::calcHist(&I, 1, 0, cv::Mat(), hist, 1, &histSize, &histRange, true, false);
 
     int threshold = int(2.55 * saturation);
     int gmin = threshold;
     int gmax = 255 - threshold;
 
-    int wmin = 0;
-    int wmax = 255;
-
-//    qDebug() << gmax << "\t" << gmin << "\t" << gammaValue;
-
-    float d = wmax + wmin;
-    float g = gmax - gmin;
+    double g = gmax - gmin;
 
 //    qDebug() << d << "\t" << g;
 
     for(int i = 0; i < I.rows * I.cols; i++)
     {
-        I.data[i] = d - wmin * std::pow(((I.data[i] - gmin) / g), gammaValue);
+        I.data[i] = CV_CAST_8U((int)(255 * std::pow(((I.data[i] - gmin) / g), gammaValue)));
     }
 
     I.copyTo(dst);
