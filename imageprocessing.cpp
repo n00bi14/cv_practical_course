@@ -114,20 +114,8 @@ void ImageProcessing::stretchImage(InputArray src, OutputArray dst, int saturati
 //            qDebug() << i << ": " << hist.data[i];
 
     int threshold = int(2.55 * saturation);
-    int gmin = 0;
-    int gmax = 0;
-
-    for(gmin = 0; gmin < hist.rows; gmin++)
-        if(hist.data[gmin] < threshold)
-            hist.data[gmin] = 0;
-        else
-            break;
-
-    for(gmax = hist.rows; gmax > 0 ; gmax--)
-        if(hist.data[gmax] < threshold)
-            hist.data[gmax] = 0;
-        else
-            break;
+    int gmin = threshold;
+    int gmax = 255 - threshold;
 
     int wmin = 0;
     int wmax = 255;
@@ -155,20 +143,8 @@ void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double 
     cv::calcHist(&I, 1, 0, cv::Mat(), hist, 1, &histSize, &histRange, true, false);
 
     int threshold = int(2.55 * saturation);
-    int gmin = 0;
-    int gmax = 0;
-
-    for(gmin = 0; gmin < hist.rows; gmin++)
-        if(hist.data[gmin] < threshold)
-            hist.data[gmin] = 0;
-        else
-            break;
-
-    for(gmax = hist.rows; gmax > 0 ; gmax--)
-        if(hist.data[gmax] < threshold)
-            hist.data[gmax] = 0;
-        else
-            break;
+    int gmin = threshold;
+    int gmax = 255 - threshold;
 
     int wmin = 0;
     int wmax = 255;
