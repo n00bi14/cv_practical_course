@@ -26,7 +26,7 @@ class ChallangeThree : public QDialog
     Q_OBJECT
 
 public:
-    explicit ChallangeThree(string filename, string resultPath,QWidget *parent = 0);
+    explicit ChallangeThree(string filename, string resultPath, QWidget *parent = 0);
     ~ChallangeThree();
 
 private:

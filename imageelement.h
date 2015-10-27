@@ -2,6 +2,7 @@
 #define IMAGEELEMENT_H
 
 #include <QWidget>
+#include <QPainter>
 
 
 #include <core.hpp>
@@ -19,10 +20,12 @@ class ImageElement : public QWidget
     Q_OBJECT
 
 public:
-    explicit ImageElement(std::string title, std::string path, QWidget *parent = 0);
+    ImageElement(std::string title, std::string path, QWidget *parent = 0);
     ImageElement(std::string title, const Mat& I, QWidget *parent = 0);
+    explicit ImageElement(QWidget *parent = 0);
     ~ImageElement();
     void showImageElement();
+    void showImageElement(Mat& I);
 
 protected:
     virtual void paintEvent(QPaintEvent *event);

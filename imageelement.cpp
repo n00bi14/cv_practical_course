@@ -1,5 +1,5 @@
 #include "imageelement.h"
-#include "ui_imageelement.h"
+//#include "ui_imageelement.h"
 
 ImageElement::ImageElement(std::string heading, std::string filename, QWidget *parent) :
     QWidget(parent), heading(heading), filename(filename)
@@ -14,9 +14,21 @@ ImageElement::ImageElement(std::string title, const Mat& I, QWidget *parent):
 {
 }
 
+ImageElement::ImageElement(QWidget *parent):
+    QWidget(parent)
+{
+
+}
+
 ImageElement::~ImageElement()
 {
 
+}
+
+void ImageElement::showImageElement(Mat& I)
+{
+    this->image = I;
+    this->showImageElement();
 }
 
 void ImageElement::showImageElement()
@@ -35,6 +47,8 @@ void ImageElement::showImageElement()
 
 
     int scaleTo = (this->size().width() < this->size().height()) ? this->size().width() : this->size().height();
+
+    qDebug() << this->size().width() << "\t" << this->size().height();
 
     if(_qimage.width() < _qimage.height())
         _qimage = _qimage.scaledToHeight(scaleTo);

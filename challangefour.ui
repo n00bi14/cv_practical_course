@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChallangeFour</class>
+ <widget class="QDialog" name="ChallangeFour">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1199</width>
+    <height>617</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="btn_original">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>10</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Original</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_mittelwertfilter">
+   <property name="geometry">
+    <rect>
+     <x>1028</x>
+     <y>140</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Mittelwertfilter</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_gaussfilter">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>180</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Gaussfilter</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spin_filterSize">
+   <property name="geometry">
+    <rect>
+     <x>1037</x>
+     <y>70</y>
+     <width>131</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>15</number>
+   </property>
+   <property name="singleStep">
+    <number>2</number>
+   </property>
+  </widget>
+  <widget class="ImageElement" name="img_original" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>451</width>
+     <height>441</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_close">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>550</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Fenster schließen</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_summenfilter">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>110</y>
+     <width>111</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Summenfilter:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_differenzenfilter">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>240</y>
+     <width>131</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Differenzenfilter:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_x_frontGradient">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>270</y>
+     <width>181</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>1. Ableitung in x-Richtung
+als Vorwärtsgradient</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_y_backGradient">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>330</y>
+     <width>181</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>1. Ableitung in y-Richtung
+als Rückwärtsgradient</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_laplace">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>390</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Laplace</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_sobelX">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>420</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sobel - X</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_sobelY">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>450</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sobel - Y</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_sobelBetrag">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>480</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sobel - Betrag</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_cannyEdge">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>510</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Canny Edge</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>40</y>
+     <width>101</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Filtergröße:</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spin_cannyEdgeThreshold">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>540</y>
+     <width>131</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>100</number>
+   </property>
+   <property name="singleStep">
+    <number>1</number>
+   </property>
+  </widget>
+  <widget class="ImageElement" name="img_bearbeitet" native="true">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>40</y>
+     <width>451</width>
+     <height>441</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ImageElement</class>
+   <extends>QWidget</extends>
+   <header>imageelement.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

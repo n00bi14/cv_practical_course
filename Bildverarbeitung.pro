@@ -5,8 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += widgets
 
 TARGET = Bildverarbeitung
 TEMPLATE = app
@@ -25,16 +24,19 @@ SOURCES += main.cpp\
     imageelement.cpp \
     challangetwo.cpp \
     imageprocessing.cpp \
-    challangethree.cpp
+    challangethree.cpp \
+    challangefour.cpp
 
 HEADERS  += mainwindow.h \
     challangeone.h \
     imageelement.h \
     challangetwo.h \
     imageprocessing.h \
-    challangethree.h
+    challangethree.h \
+    challangefour.h
 
 FORMS    += mainwindow.ui \
     challangeone.ui \
     challangetwo.ui \
-    challangethree.ui
+    challangethree.ui \
+    challangefour.ui

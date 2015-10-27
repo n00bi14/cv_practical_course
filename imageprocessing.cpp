@@ -102,14 +102,33 @@ void ImageProcessing::stretchImage(InputArray src, OutputArray dst, int saturati
 
     src.getMat().copyTo(I);
 
+    int histSize = 255;
+    float range[] = {0, 255};
+    const float* histRange = {range};
 
-    int threshold = int(2.55 * saturation);
-    int gmin = threshold;
-    int gmax = 255 - threshold;
+    cv::Mat histogram;
+    cv::calcHist(&I, 1, 0, cv::Mat(), histogram, 1, &histSize, &histRange, true, false);
 
+    int size = (I.cols * I.rows);
+    int threshold = int((size / 100) * saturation);
+    int tmp  = 0;
+    int gmin = 0;
+    int gmax = 0;
+
+    for(gmin = 0; gmin < histogram.rows * histogram.cols; gmin++)
+        if(tmp < threshold)
+            tmp += histogram.data[gmin];
+        else
+            break;
+
+    for(gmax = histogram.rows * histogram.cols; gmax >= 0 ; gmax--)
+        if(tmp < threshold)
+            tmp += histogram.data[gmax];
+        else
+            break;
 
     double d = 255 / (gmax - gmin);
-    int size = (I.cols * I.rows);
+
 
     for(int i = 0; i < size; i++){
         uchar pixel = (I.data[i]);
@@ -125,10 +144,30 @@ void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double 
 
     src.getMat().copyTo(I);
 
+    int histSize = 255;
+    float range[] = {0, 255};
+    const float* histRange = {range};
 
-    int threshold = int(2.55 * saturation);
-    int gmin = threshold;
-    int gmax = 255 - threshold;
+    cv::Mat histogram;
+    cv::calcHist(&I, 1, 0, cv::Mat(), histogram, 1, &histSize, &histRange, true, false);
+
+    int size = (I.cols * I.rows);
+    int threshold = int((size / 100) * saturation);
+    int tmp  = 0;
+    int gmin = 0;
+    int gmax = 0;
+
+    for(gmin = 0; gmin < histogram.rows * histogram.cols; gmin++)
+        if(tmp < threshold)
+            tmp += histogram.data[gmin];
+        else
+            break;
+
+    for(gmax = histogram.rows * histogram.cols; gmax >= 0 ; gmax--)
+        if(tmp < threshold)
+            tmp += histogram.data[gmax];
+        else
+            break;
 
     double g = gmax - gmin;
 
@@ -140,4 +179,58 @@ void ImageProcessing::correktGammaValue(InputArray src, OutputArray dst, double 
     }
 
     I.copyTo(dst);
+}
+
+void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelSize, FILTER filterName, int cannyEdgeThreshold)
+{
+    switch(filterName)
+    {
+    case MEDIAN:
+        medianBlur(src,dst, kernelSize);
+        break;
+    case GAUSSIAN:
+    {
+        double sigmaX = (kernelSize / 6) + 1;
+        GaussianBlur(src,dst, Size(kernelSize,kernelSize), sigmaX);
+    }
+        break;
+    case XFRONTGRADIENT:
+        //TODO
+        break;
+    case YBACKGRADIENT:
+        //TODO
+        break;
+    case LAPLACE:
+    {
+        Mat afterLaplacian, afterGaussian;
+        src.copyTo(afterGaussian);
+        src.copyTo(afterLaplacian);
+        ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
+        Laplacian( afterGaussian, afterLaplacian, CV_16S, kernelSize);
+        convertScaleAbs( afterLaplacian, dst );
+    }
+        break;
+    case SOBELX:
+        //TODO
+        break;
+    case SOBELY:
+        //TODO
+        break;
+    case SOBELBETRAG:
+        //TODO
+        break;
+    case CANNYEDGE:
+        //Has a big big bug!!!!
+    {
+        Mat detected_edges;
+        int k = kernelSize<3?3:kernelSize;
+
+        detected_edges.create(src.size(), src.type());
+        blur( src, detected_edges, Size(k,k) );
+        Canny( detected_edges, dst, cannyEdgeThreshold, cannyEdgeThreshold*3, k );
+//        dst = Scalar::all(0);
+        src.copyTo(dst,detected_edges);
+    }
+        break;
+    }
 }
