@@ -106,12 +106,18 @@ void ChallangeFour::execLaplace()
 
 void ChallangeFour::execSobelX()
 {
-
+    std::cout << "execSobelX" << std::endl;
+    ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::SOBELX);
+    ui->img_bearbeitet->showImageElement(processedImage);
+    this->repaint();
 }
 
 void ChallangeFour::execSobelY()
 {
-
+    std::cout << "execSobelY" << std::endl;
+    ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::SOBELY);
+    ui->img_bearbeitet->showImageElement(processedImage);
+    this->repaint();
 }
 
 void ChallangeFour::execSobelBetrag()

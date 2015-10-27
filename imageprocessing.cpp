@@ -211,10 +211,24 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     }
         break;
     case SOBELX:
-        //TODO
+    {
+        Mat afterSobel, afterGaussian;
+        src.copyTo(afterGaussian);
+        src.copyTo(afterSobel);
+        ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
+        Sobel(afterGaussian,afterSobel,CV_64F,1,0,kernelSize);
+        convertScaleAbs( afterSobel, dst );
+    }
         break;
     case SOBELY:
-        //TODO
+    {
+        Mat afterSobel, afterGaussian;
+        src.copyTo(afterGaussian);
+        src.copyTo(afterSobel);
+        ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
+        Sobel(afterGaussian,afterSobel,CV_64F,0,1,kernelSize);
+        convertScaleAbs( afterSobel, dst );
+    }
         break;
     case SOBELBETRAG:
         //TODO
