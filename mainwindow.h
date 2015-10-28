@@ -9,6 +9,7 @@
 #include "challangetwo.h"
 #include "challangethree.h"
 #include "challangefour.h"
+#include "challangefive.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +34,7 @@ private:
     void executeAufgabe2d();
     void executeAufgabe3();
     void executeAufgabe4();
+    void executeAufgabe5();
     void exit();
 };
 

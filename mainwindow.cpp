@@ -16,12 +16,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QPushButton* btn_aufgabe2d = findChild<QPushButton*>("btn_aufgabe2d");
     QPushButton* btn_aufgabe3 = findChild<QPushButton*>("btn_aufgabe3");
     QPushButton* btn_aufgabe4 = findChild<QPushButton*>("btn_aufgabe4");
+    QPushButton* btn_aufgabe5 = findChild<QPushButton*>("btn_aufgabe5");
     QObject::connect(btn_aufgabe2a, SIGNAL (clicked()), this, SLOT (executeAufgabe2a()));
     QObject::connect(btn_aufgabe2b, SIGNAL (clicked()), this, SLOT (executeAufgabe2b()));
     QObject::connect(btn_aufgabe2c, SIGNAL (clicked()), this, SLOT (executeAufgabe2c()));
     QObject::connect(btn_aufgabe2d, SIGNAL (clicked()), this, SLOT (executeAufgabe2d()));
     QObject::connect(btn_aufgabe3, SIGNAL (clicked()), this, SLOT (executeAufgabe3()));
     QObject::connect(btn_aufgabe4, SIGNAL (clicked()), this, SLOT (executeAufgabe4()));
+    QObject::connect(btn_aufgabe5, SIGNAL (clicked()), this, SLOT (executeAufgabe5()));
 
 
     QPushButton* btn_exit = findChild<QPushButton*>("btn_exit");
@@ -113,6 +115,16 @@ void MainWindow::executeAufgabe4()
     string resultPath = "Images/Aufgabe4/Results/";
 
     ChallangeFour co(filename, resultPath, true);
+    co.exec();
+}
+
+void MainWindow::executeAufgabe5()
+{
+    string filename_orig = "Images/Aufgabe5/aufgabe_5_orig.jpg";
+    string filename_proc = "Images/Aufgabe5/aufgabe_5.jpg";
+    string resultPath = "Images/Aufgabe5/Results/";
+
+    ChallangeFive co(filename_orig, filename_proc, resultPath);
     co.exec();
 }
 

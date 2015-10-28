@@ -25,7 +25,7 @@ public:
     explicit ImageElement(QWidget *parent = 0);
     ~ImageElement();
     void showImageElement();
-    void showImageElement(Mat& I);
+    void showImageElement(Mat& I, std::string title = "");
 
 protected:
     virtual void paintEvent(QPaintEvent *event);

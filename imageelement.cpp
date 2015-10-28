@@ -25,9 +25,10 @@ ImageElement::~ImageElement()
 
 }
 
-void ImageElement::showImageElement(Mat& I)
+void ImageElement::showImageElement(Mat& I, std::string title)
 {
     this->image = I;
+    this->heading = title;
     this->showImageElement();
 }
 

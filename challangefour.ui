@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1199</width>
-    <height>617</height>
+    <height>725</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,17 +75,17 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>40</y>
-     <width>451</width>
-     <height>441</height>
+     <y>10</y>
+     <width>491</width>
+     <height>571</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_close">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>550</y>
+     <x>1050</x>
+     <y>690</y>
      <width>141</width>
      <height>25</height>
     </rect>
@@ -251,11 +251,24 @@ als Rückwärtsgradient</string>
   <widget class="ImageElement" name="img_bearbeitet" native="true">
    <property name="geometry">
     <rect>
-     <x>490</x>
-     <y>40</y>
-     <width>451</width>
-     <height>441</height>
+     <x>510</x>
+     <y>10</y>
+     <width>491</width>
+     <height>571</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>1020</x>
+     <y>610</y>
+     <width>161</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Faltung ausführen</string>
    </property>
   </widget>
  </widget>

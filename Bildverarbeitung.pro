@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     challangetwo.cpp \
     imageprocessing.cpp \
     challangethree.cpp \
-    challangefour.cpp
+    challangefour.cpp \
+    challangefive.cpp
 
 HEADERS  += mainwindow.h \
     challangeone.h \
@@ -33,10 +34,12 @@ HEADERS  += mainwindow.h \
     challangetwo.h \
     imageprocessing.h \
     challangethree.h \
-    challangefour.h
+    challangefour.h \
+    challangefive.h
 
 FORMS    += mainwindow.ui \
     challangeone.ui \
     challangetwo.ui \
     challangethree.ui \
-    challangefour.ui
+    challangefour.ui \
+    challangefive.ui

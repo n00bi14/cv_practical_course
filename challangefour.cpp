@@ -9,8 +9,8 @@ ChallangeFour::ChallangeFour(string filename, string resultPath, bool isSumFilte
 
     I = imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
     I.copyTo(processedImage);
-    ui->img_original->showImageElement(I);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_original->showImageElement(I, "Original");
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
 
 
     QSpinBox* spin_filterSize = findChild<QSpinBox*>("spin_filterSize");
@@ -29,7 +29,11 @@ ChallangeFour::ChallangeFour(string filename, string resultPath, bool isSumFilte
     QPushButton* btn_sobelY = findChild<QPushButton*>("btn_sobelY");
     QPushButton* btn_sobelBetrag = findChild<QPushButton*>("btn_sobelBetrag");
     QPushButton* btn_cannyEdge = findChild<QPushButton*>("btn_cannyEdge");
-    QSpinBox* spin_cannyEdgeThreshold = findChild<QSpinBox*>("spin_cannyEdgeThreshold");
+//    QSpinBox* spin_cannyEdgeThreshold = findChild<QSpinBox*>("spin_cannyEdgeThreshold");
+
+    QPushButton* btn_faltung = findChild<QPushButton*>("btn_faltung");
+    QComboBox* combo_filter = findChild<QComboBox*>("combo_filter");
+    //TODO: Slot erstellen, Faltung ausführen.
 
     connect(spin_filterSize, SIGNAL(valueChanged(int)), this, SLOT(spinValueChanged(int)));
     connect(btn_original, SIGNAL(clicked()), this, SLOT(resetImage()));
@@ -59,7 +63,7 @@ ChallangeFour::~ChallangeFour()
 void ChallangeFour::resetImage()
 {
     I.copyTo(processedImage);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
 
@@ -67,7 +71,7 @@ void ChallangeFour::execMittelwertfilter()
 {
     std::cout << "execMittelwertsfilter" << std::endl;
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue,  ImageProcessing::MEDIAN);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
 
@@ -75,7 +79,7 @@ void ChallangeFour::execGaussfilter()
 {
     std::cout << "execGaussfilter" << std::endl;
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::GAUSSIAN);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
 
@@ -100,7 +104,7 @@ void ChallangeFour::execLaplace()
 {
     std::cout << "execLaplace" << std::endl;
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::LAPLACE);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
 
@@ -108,7 +112,7 @@ void ChallangeFour::execSobelX()
 {
     std::cout << "execSobelX" << std::endl;
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::SOBELX);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
 
@@ -116,7 +120,7 @@ void ChallangeFour::execSobelY()
 {
     std::cout << "execSobelY" << std::endl;
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::SOBELY);
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
 
@@ -130,6 +134,6 @@ void ChallangeFour::execCannyEdge()
     std::cout << "execCannyEdge" << std::endl;
     QSpinBox* spin_cannyEdgeThreshold = findChild<QSpinBox*>("spin_cannyEdgeThreshold");
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::CANNYEDGE, spin_cannyEdgeThreshold->value());
-    ui->img_bearbeitet->showImageElement(processedImage);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
 }
