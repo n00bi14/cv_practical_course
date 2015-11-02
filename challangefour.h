@@ -6,6 +6,7 @@
 
 #include <QSlider>
 #include <QLineEdit>
+#include <QComboBox>
 
 #include <vector>
 #include <iostream>
@@ -35,8 +36,10 @@ private:
     bool isSumFilter;
     Mat I, processedImage;
     QLineEdit* txt_filterSize;
+    QComboBox* combo_filter;
 
     int spinFilterSizeValue;
+
 private slots:
     void resetImage();
 
@@ -50,6 +53,9 @@ private slots:
     void execSobelY();
     void execSobelBetrag();
     void execCannyEdge();
+
+    void execFaltung();
+//    void comboChange(QString value);
 
     void spinValueChanged(int value);
 };

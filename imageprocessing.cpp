@@ -206,7 +206,7 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
         src.copyTo(afterGaussian);
         src.copyTo(afterLaplacian);
         ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
-        Laplacian( afterGaussian, afterLaplacian, CV_16S, kernelSize);
+        Laplacian( afterGaussian, afterLaplacian, CV_64F, kernelSize);
         convertScaleAbs( afterLaplacian, dst );
     }
         break;
@@ -247,4 +247,87 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     }
         break;
     }
+}
+
+void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filtername){
+    int k = 3;
+    Mat_<double> kernel(3,3,1.);
+
+    if(QString::compare(filtername, QString("Filter 1"), Qt::CaseInsensitive) == 0)
+    {
+        std::cout << "Filter 1" << std::endl;
+        double &p = kernel.at<double>(1, 1);
+        p = -8;
+
+    }else if(QString::compare(filtername, QString("Filter 2"), Qt::CaseInsensitive) == 0){
+
+        std::cout << "Filter 2" << std::endl;
+
+        double& p1 = kernel.at<double>(0, 1);
+        p1 = 2;
+        double& p2 = kernel.at<double>(1, 0);
+        p2 = 2;
+        double& p3 = kernel.at<double>(1, 1);
+        p3 = 4;
+        double& p4 = kernel.at<double>(1, 2);
+        p4 = 2;
+        double& p5 = kernel.at<double>(2, 1);
+        p5 = 2;
+
+        kernel = kernel / (float)16.;
+
+    }else if(QString::compare(filtername, QString("Filter 3"), Qt::CaseInsensitive) == 0){
+
+        std::cout << "Filter 3" << std::endl;
+        double& p1 = kernel.at<double>(0, 1);
+        p1 = 2;
+        double& p2 = kernel.at<double>(1, 0);
+        p2 = 0;
+        double& p3 = kernel.at<double>(1, 1);
+        p3 = 0;
+        double& p4 = kernel.at<double>(1, 2);
+        p4 = 0;
+        double& p5 = kernel.at<double>(2, 0);
+        p5 = -1;
+        double& p6 = kernel.at<double>(2, 1);
+        p6 = -2;
+        double& p7 = kernel.at<double>(2, 2);
+        p7 = -1;
+    }
+
+    std::cout << kernel << std::endl;
+//    filter2D(src, dst, -1, kernel, Point(-1,-1), 0, BORDER_DEFAULT );
+
+    Mat_<double> dstMat = src.getMat_();
+
+    std::cout << dstMat << std::endl << std::endl;
+    cout << dstMat.cols << "x" << dstMat.rows << endl;
+    int i = 0;
+    for(; i < dstMat.rows; i++){
+        int j = 0;
+        for(; j < dstMat.cols; j++){
+            double &f = dstMat.at<double>(i,j);
+            f = faltePixel(dstMat, i, j, kernel, k);
+        }
+        if(i == 0) cout << "j=" << j << endl;
+    }
+    cout << "i=" << i << endl;
+
+//    std::cout << dstMat << std::endl << std::endl;
+    dstMat.copyTo(dst);
+}
+
+double ImageProcessing::faltePixel(Mat_<double> &I, int y_pos, int x_pos, Mat_<double>& kernel, int k){
+    double result = 0.;
+
+    for(int v = (-1)*(k/2) ; v <= k/2; v++){
+        for(int u = (-1)*(k/2); u <= k/2; u++){
+            if(x_pos + u >= 0 && y_pos + v >= 0)
+            {
+                result += I.at<double>(y_pos + v, x_pos + u) * kernel.at<double>((k/2) + v, (k/2) + u);
+            }
+        }
+    }
+
+    return result;
 }

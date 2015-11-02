@@ -62,7 +62,7 @@
     </rect>
    </property>
    <property name="minimum">
-    <number>1</number>
+    <number>3</number>
    </property>
    <property name="maximum">
     <number>99</number>
@@ -258,7 +258,7 @@ als Rückwärtsgradient</string>
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btn_faltung">
    <property name="geometry">
     <rect>
      <x>1020</x>
@@ -269,6 +269,16 @@ als Rückwärtsgradient</string>
    </property>
    <property name="text">
     <string>Faltung ausführen</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="combo_filter">
+   <property name="geometry">
+    <rect>
+     <x>1020</x>
+     <y>640</y>
+     <width>161</width>
+     <height>25</height>
+    </rect>
    </property>
   </widget>
  </widget>

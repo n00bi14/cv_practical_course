@@ -4,7 +4,10 @@
 #include <core.hpp>
 #include <highgui.hpp>
 #include <imgproc.hpp>
+
 #include <string>
+#include <iostream>
+
 #include <QDebug>
 
 using namespace std;
@@ -28,10 +31,11 @@ public:
     static void stretchImage(InputArray src, OutputArray dst, int saturation);
     static void correktGammaValue(InputArray src, OutputArray dst, double gammaValue, int saturation);
     static void filterFactory(InputArray src, OutputArray dst, int kernelSize, FILTER filterName, int cannyEdgeThreshold = 1);
+    static void faltung(InputArray src, OutputArray dst, QString filtername);
 
 
 private:
-
+    static double faltePixel(Mat_<double>& I, int x_pos, int y_pos, Mat_<double>& kernel, int kernelSize);
 
 };
 

@@ -111,7 +111,9 @@ void MainWindow::executeAufgabe3()
 
 void MainWindow::executeAufgabe4()
 {
-    string filename = "Images/Aufgabe4/aufgabe_4.jpg";
+//    string filename = "Images/Aufgabe4/aufgabe_4.jpg";
+    string filename = "Images/Aufgabe4/bild_2.jpg";
+//    string filename = "Images/Aufgabe4/mittelwert.jpg";
     string resultPath = "Images/Aufgabe4/Results/";
 
     ChallangeFour co(filename, resultPath, true);

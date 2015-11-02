@@ -8,6 +8,7 @@ ChallangeFour::ChallangeFour(string filename, string resultPath, bool isSumFilte
     ui->setupUi(this);
 
     I = imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
+
     I.copyTo(processedImage);
     ui->img_original->showImageElement(I, "Original");
     ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
@@ -32,7 +33,12 @@ ChallangeFour::ChallangeFour(string filename, string resultPath, bool isSumFilte
 //    QSpinBox* spin_cannyEdgeThreshold = findChild<QSpinBox*>("spin_cannyEdgeThreshold");
 
     QPushButton* btn_faltung = findChild<QPushButton*>("btn_faltung");
-    QComboBox* combo_filter = findChild<QComboBox*>("combo_filter");
+    combo_filter = findChild<QComboBox*>("combo_filter");
+    combo_filter->addItem("Filter 1");
+    combo_filter->addItem("Filter 2");
+    combo_filter->addItem("Filter 3");
+
+
     //TODO: Slot erstellen, Faltung ausführen.
 
     connect(spin_filterSize, SIGNAL(valueChanged(int)), this, SLOT(spinValueChanged(int)));
@@ -50,6 +56,11 @@ ChallangeFour::ChallangeFour(string filename, string resultPath, bool isSumFilte
     connect(btn_sobelBetrag, SIGNAL(clicked()), this, SLOT(execSobelBetrag()));
     connect(btn_cannyEdge, SIGNAL(clicked()), this, SLOT(execCannyEdge()));
 
+    connect(btn_faltung, SIGNAL(clicked()), this, SLOT(execFaltung()));
+//    connect(combo_filter, SIGNAL(editTextChanged(QString)), this, SLOT(comboChange(QString));
+
+
+    this->spinFilterSizeValue = spin_filterSize->value();
     this->repaint();
 
 }
@@ -136,4 +147,12 @@ void ChallangeFour::execCannyEdge()
     ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::CANNYEDGE, spin_cannyEdgeThreshold->value());
     ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
+}
+
+void ChallangeFour::execFaltung()
+{
+    std::cout << "execFaltung() - Start" << std::endl;
+    ImageProcessing::faltung(this->processedImage, this->processedImage, this->combo_filter->currentText());
+    this->repaint();
+    std::cout << "execFaltung() - Ende" << std::endl;
 }
