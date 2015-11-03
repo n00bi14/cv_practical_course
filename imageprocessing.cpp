@@ -195,10 +195,16 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     }
         break;
     case XFRONTGRADIENT:
-        //TODO
+    {
+        Mat kernelx = (Mat_<float>(1,3)<<-0.5, 0, 0.5);
+        filter2D(src, dst, -1, kernelx);
+    }
         break;
     case YBACKGRADIENT:
-        //TODO
+    {
+        Mat kernely = (Mat_<float>(3,1)<<-0.5, 0, 0.5);
+        filter2D(src, dst, -1, kernely);
+    }
         break;
     case LAPLACE:
     {
@@ -231,19 +237,37 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     }
         break;
     case SOBELBETRAG:
-        //TODO
+    {
+        Mat afterX, afterY;
+        ImageProcessing::filterFactory(src, afterX, kernelSize, ImageProcessing::SOBELX);
+        ImageProcessing::filterFactory(src, afterY, kernelSize, ImageProcessing::SOBELY);
+
+        Mat_<double> X = (Mat_<double>)afterX;
+        Mat_<double> Y = (Mat_<double>)afterY;
+        Mat_<double> tmp(src.getMat_().rows, src.getMat_().cols, 0.);
+        for(int i = 0; i < tmp.rows; i++){
+            for(int j = 0; j < tmp.cols; j++){
+                double x = X(i,j);
+                double y = Y(i,j);
+                double s = sqrt((x*x + y*y));
+                tmp(i,j) = s;
+            }
+        }
+
+        afterX.copyTo(dst);
+    }
         break;
     case CANNYEDGE:
-        //Has a big big bug!!!!
     {
-        Mat detected_edges;
+        Mat detected_edges, dst_gray;
+        Mat src_gray = src.getMat();
         int k = kernelSize<3?3:kernelSize;
 
-        detected_edges.create(src.size(), src.type());
-        blur( src, detected_edges, Size(k,k) );
-        Canny( detected_edges, dst, cannyEdgeThreshold, cannyEdgeThreshold*3, k );
-//        dst = Scalar::all(0);
-        src.copyTo(dst,detected_edges);
+        blur( src_gray, detected_edges, Size(k,k) );
+        Canny( detected_edges, detected_edges, cannyEdgeThreshold, cannyEdgeThreshold*3, k );
+        dst_gray = Scalar::all(0);
+        src.copyTo( dst_gray, detected_edges);
+        dst_gray.copyTo(dst);
     }
         break;
     }
@@ -256,58 +280,66 @@ void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filternam
     if(QString::compare(filtername, QString("Filter 1"), Qt::CaseInsensitive) == 0)
     {
         std::cout << "Filter 1" << std::endl;
-        double &p = kernel.at<double>(1, 1);
-        p = -8;
+        kernel(1, 1) = -8;
 
     }else if(QString::compare(filtername, QString("Filter 2"), Qt::CaseInsensitive) == 0){
 
         std::cout << "Filter 2" << std::endl;
 
-        double& p1 = kernel.at<double>(0, 1);
-        p1 = 2;
-        double& p2 = kernel.at<double>(1, 0);
-        p2 = 2;
-        double& p3 = kernel.at<double>(1, 1);
-        p3 = 4;
-        double& p4 = kernel.at<double>(1, 2);
-        p4 = 2;
-        double& p5 = kernel.at<double>(2, 1);
-        p5 = 2;
+        kernel(0, 1) = 2;
+        kernel(1, 0) = 2;
+        kernel(1, 1) = 4;
+        kernel(1, 2) = 2;
+        kernel(2, 1) = 2;
 
         kernel = kernel / (float)16.;
 
     }else if(QString::compare(filtername, QString("Filter 3"), Qt::CaseInsensitive) == 0){
 
         std::cout << "Filter 3" << std::endl;
-        double& p1 = kernel.at<double>(0, 1);
-        p1 = 2;
-        double& p2 = kernel.at<double>(1, 0);
-        p2 = 0;
-        double& p3 = kernel.at<double>(1, 1);
-        p3 = 0;
-        double& p4 = kernel.at<double>(1, 2);
-        p4 = 0;
-        double& p5 = kernel.at<double>(2, 0);
-        p5 = -1;
-        double& p6 = kernel.at<double>(2, 1);
-        p6 = -2;
-        double& p7 = kernel.at<double>(2, 2);
-        p7 = -1;
+        kernel(0, 1) = 2;
+        kernel(1, 0) = 0;
+        kernel(1, 1) = 0;
+        kernel(1, 2) = 0;
+        kernel(2, 0) = -1;
+        kernel(2, 1) = -2;
+        kernel(2, 2) = -1;
+    }else if(QString::compare(filtername, QString("SOBEL_X"), Qt::CaseInsensitive) == 0){
+
+        std::cout << "Filter SOBEL X" << std::endl;
+        kernel(0, 1) = 2;
+        kernel(1, 0) = 0;
+        kernel(1, 1) = 0;
+        kernel(1, 2) = 0;
+        kernel(2, 0) = -1;
+        kernel(2, 1) = -2;
+        kernel(2, 2) = -1;
+    }else if(QString::compare(filtername, QString("SOBEL_Y"), Qt::CaseInsensitive) == 0){
+
+        std::cout << "Filter SOBEL Y" << std::endl;
+        kernel(0, 1) = 0;
+        kernel(0, 2) = -1;
+        kernel(1, 0) = 2;
+        kernel(1, 1) = 0;
+        kernel(1, 2) = -2;
+        kernel(2, 1) = 0;
+        kernel(2, 2) = -1;
     }
 
     std::cout << kernel << std::endl;
-//    filter2D(src, dst, -1, kernel, Point(-1,-1), 0, BORDER_DEFAULT );
+//    filter2D(src, dst, -1, kernel);
 
     Mat_<double> dstMat = src.getMat_();
+    Mat_<double> kopie = src.getMat_();
 
-    std::cout << dstMat << std::endl << std::endl;
+
+    std::cout << kopie << std::endl << std::endl;
     cout << dstMat.cols << "x" << dstMat.rows << endl;
     int i = 0;
     for(; i < dstMat.rows; i++){
         int j = 0;
         for(; j < dstMat.cols; j++){
-            double &f = dstMat.at<double>(i,j);
-            f = faltePixel(dstMat, i, j, kernel, k);
+            dstMat(i,j) = faltePixel(kopie, i, j, kernel, k);
         }
         if(i == 0) cout << "j=" << j << endl;
     }
@@ -324,7 +356,7 @@ double ImageProcessing::faltePixel(Mat_<double> &I, int y_pos, int x_pos, Mat_<d
         for(int u = (-1)*(k/2); u <= k/2; u++){
             if(x_pos + u >= 0 && y_pos + v >= 0)
             {
-                result += I.at<double>(y_pos + v, x_pos + u) * kernel.at<double>((k/2) + v, (k/2) + u);
+                result += I(y_pos + v, x_pos + u) * kernel((k/2) + v, (k/2) + u);
             }
         }
     }

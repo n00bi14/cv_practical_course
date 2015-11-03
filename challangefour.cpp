@@ -103,12 +103,18 @@ void ChallangeFour::spinValueChanged(int value)
 
 void ChallangeFour::execXfrontGradient()
 {
-
+    std::cout << "execXfrontGradient" << std::endl;
+    ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::XFRONTGRADIENT);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
+    this->repaint();
 }
 
 void ChallangeFour::execYBackGradient()
 {
-
+    std::cout << "execYBackGradient" << std::endl;
+    ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::YBACKGRADIENT);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
+    this->repaint();
 }
 
 void ChallangeFour::execLaplace()
@@ -137,7 +143,10 @@ void ChallangeFour::execSobelY()
 
 void ChallangeFour::execSobelBetrag()
 {
-
+    std::cout << "execSobelBetrag" << std::endl;
+    ImageProcessing::filterFactory(this->processedImage, this->processedImage, this->spinFilterSizeValue, ImageProcessing::SOBELBETRAG);
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
+    this->repaint();
 }
 
 void ChallangeFour::execCannyEdge()
@@ -153,6 +162,7 @@ void ChallangeFour::execFaltung()
 {
     std::cout << "execFaltung() - Start" << std::endl;
     ImageProcessing::faltung(this->processedImage, this->processedImage, this->combo_filter->currentText());
+    ui->img_bearbeitet->showImageElement(processedImage, "Bearbeitet");
     this->repaint();
     std::cout << "execFaltung() - Ende" << std::endl;
 }
