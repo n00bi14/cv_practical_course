@@ -333,8 +333,9 @@ void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filternam
     Mat_<double> kopie = src.getMat_();
 
 
-    std::cout << kopie << std::endl << std::endl;
+//    cout << kopie << endl << endl;
     cout << dstMat.cols << "x" << dstMat.rows << endl;
+
     int i = 0;
     for(; i < dstMat.rows; i++){
         int j = 0;
@@ -351,15 +352,22 @@ void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filternam
 
 double ImageProcessing::faltePixel(Mat_<double> &I, int y_pos, int x_pos, Mat_<double>& kernel, int k){
     double result = 0.;
+    cout << "x = " << x_pos << "  y = " << y_pos << endl;
+    cout << "\tpixel_new = ";
+
 
     for(int v = (-1)*(k/2) ; v <= k/2; v++){
         for(int u = (-1)*(k/2); u <= k/2; u++){
             if(x_pos + u >= 0 && y_pos + v >= 0)
             {
+                cout << I(y_pos + v, x_pos + u) << " * " << kernel((k/2) + v, (k/2) + u) << " + ";
                 result += I(y_pos + v, x_pos + u) * kernel((k/2) + v, (k/2) + u);
             }
         }
     }
+
+
+    cout << " = " << result<< endl;
 
     return result;
 }
