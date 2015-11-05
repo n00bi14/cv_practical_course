@@ -72,6 +72,25 @@
     <string>Reset</string>
    </property>
   </widget>
+  <widget class="QLabel" name="lbl_info">
+   <property name="geometry">
+    <rect>
+     <x>970</x>
+     <y>100</y>
+     <width>131</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>

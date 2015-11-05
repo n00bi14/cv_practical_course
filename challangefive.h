@@ -4,6 +4,11 @@
 #include <QDialog>
 #include <QDebug>
 
+#include <vector>
+
+#include <opencv2/features2d/features2d.hpp>
+
+
 #include "imageelement.h"
 #include "imageprocessing.h"
 

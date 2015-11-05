@@ -15,7 +15,7 @@ ChallangeFive::ChallangeFive(string filename_orig, string filename_proc, string 
     connect(btn_reset, SIGNAL(clicked()), this, SLOT(reset()));
     connect(btn_close, SIGNAL(clicked()), this, SLOT(close()));
 
-    this->I = imread(this->filename_orig);
+    this->I = imread(this->filename_orig, IMREAD_GRAYSCALE);
     ui->img_original->showImageElement(this->I, "Original");
     this->reset();
 }
@@ -27,11 +27,21 @@ ChallangeFive::~ChallangeFive()
 
 void ChallangeFive::start()
 {
+    int hessian = 400;
 
+
+//    SurfFeatureDetector detector( minHessian );
+//    std::vector<KeyPoint> keypoints;
+//    detector.detect( this->processedImage, keypoints);
+
+//    Mat img_keypoints;
+//    drawKeypoints( this->processedImage, keypoints, img_keypoints, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+//    repaint();
 }
 
 void ChallangeFive::reset()
 {
-    this->processedImage = imread(this->filename_proc);
+    this->processedImage = imread(this->filename_proc, IMREAD_GRAYSCALE);
     ui->img_processed->showImageElement(this->processedImage, "Bearbeitet");
+    repaint();
 }

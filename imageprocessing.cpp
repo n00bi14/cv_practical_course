@@ -12,17 +12,18 @@ void ImageProcessing::resizeImage(double cols, double rows, InputArray src, Outp
 void ImageProcessing::resizeMax512(InputArray src, OutputArray dst)
 {
     double fx_nenner=512,fy_nenner=512;
-    if(src.cols() > src.rows())
+    Mat I = src.getMat();
+    if(I.cols > I.rows)
     {
-        fx_nenner = src.cols() - (src.cols() - 512);
-        fy_nenner = src.rows() - (src.cols() - 512);
-    }else if(src.cols() < src.rows()){
-        fy_nenner = src.rows() - (src.rows() - 512);
-        fx_nenner = src.cols() - (src.rows() - 512);
+        fx_nenner = I.cols - (I.cols - 512);
+        fy_nenner = I.rows - (I.cols - 512);
+    }else if(I.cols < I.rows){
+        fy_nenner = I.rows - (I.rows - 512);
+        fx_nenner = I.cols - (I.rows - 512);
     }
 
-    double fx = (1. / (src.cols() / fx_nenner));
-    double fy = (1. / (src.rows() / fy_nenner));
+    double fx = (1. / (I.cols / fx_nenner));
+    double fy = (1. / (I.rows / fy_nenner));
 
     //TODO: Formel klappt nicht... Nachbessern
     if(fx < 0) fx *= -1;
@@ -209,8 +210,8 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     case LAPLACE:
     {
         Mat afterLaplacian, afterGaussian;
-        src.copyTo(afterGaussian);
-        src.copyTo(afterLaplacian);
+        afterLaplacian = afterGaussian = src.getMat().clone();
+
         ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
         Laplacian( afterGaussian, afterLaplacian, CV_64F, kernelSize);
         convertScaleAbs( afterLaplacian, dst );
@@ -219,8 +220,8 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     case SOBELX:
     {
         Mat afterSobel, afterGaussian;
-        src.copyTo(afterGaussian);
-        src.copyTo(afterSobel);
+        afterSobel = afterGaussian = src.getMat().clone();
+
         ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
         Sobel(afterGaussian,afterSobel,CV_64F,1,0,kernelSize);
         convertScaleAbs( afterSobel, dst );
@@ -229,8 +230,8 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
     case SOBELY:
     {
         Mat afterSobel, afterGaussian;
-        src.copyTo(afterGaussian);
-        src.copyTo(afterSobel);
+        afterSobel = afterGaussian = src.getMat().clone();
+
         ImageProcessing::filterFactory(src, afterGaussian, kernelSize, ImageProcessing::GAUSSIAN);
         Sobel(afterGaussian,afterSobel,CV_64F,0,1,kernelSize);
         convertScaleAbs( afterSobel, dst );
@@ -238,23 +239,20 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
         break;
     case SOBELBETRAG:
     {
-        Mat afterX, afterY;
-        ImageProcessing::filterFactory(src, afterX, kernelSize, ImageProcessing::SOBELX);
-        ImageProcessing::filterFactory(src, afterY, kernelSize, ImageProcessing::SOBELY);
+        Mat X, Y;
+        ImageProcessing::filterFactory(src, X, kernelSize, ImageProcessing::SOBELX);
+        ImageProcessing::filterFactory(src, Y, kernelSize, ImageProcessing::SOBELY);
 
-        Mat_<double> X = (Mat_<double>)afterX;
-        Mat_<double> Y = (Mat_<double>)afterY;
-        Mat_<double> tmp(src.getMat_().rows, src.getMat_().cols, 0.);
+        Mat tmp(src.getMat().rows, src.getMat().cols, 0.);
         for(int i = 0; i < tmp.rows; i++){
             for(int j = 0; j < tmp.cols; j++){
-                double x = X(i,j);
-                double y = Y(i,j);
+                double x = X.at<double>(i,j);
+                double y = Y.at<double>(i,j);
                 double s = sqrt((x*x + y*y));
-                tmp(i,j) = s;
+                tmp.at<double>(i,j) = s;
             }
         }
-
-        afterX.copyTo(dst);
+        X.copyTo(dst);
     }
         break;
     case CANNYEDGE:
@@ -266,7 +264,7 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
         blur( src_gray, detected_edges, Size(k,k) );
         Canny( detected_edges, detected_edges, cannyEdgeThreshold, cannyEdgeThreshold*3, k );
         dst_gray = Scalar::all(0);
-        src.copyTo( dst_gray, detected_edges);
+        src.getMat().copyTo( dst_gray, detected_edges);
         dst_gray.copyTo(dst);
     }
         break;
@@ -275,62 +273,62 @@ void ImageProcessing::filterFactory(InputArray src, OutputArray dst, int kernelS
 
 void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filtername){
     int k = 3;
-    Mat_<double> kernel(3,3,1.);
+    Mat kernel(3,3,1.);
 
     if(QString::compare(filtername, QString("Filter 1"), Qt::CaseInsensitive) == 0)
     {
         std::cout << "Filter 1" << std::endl;
-        kernel(1, 1) = -8;
+        kernel.at<double>(1, 1) = -8;
 
     }else if(QString::compare(filtername, QString("Filter 2"), Qt::CaseInsensitive) == 0){
 
         std::cout << "Filter 2" << std::endl;
 
-        kernel(0, 1) = 2;
-        kernel(1, 0) = 2;
-        kernel(1, 1) = 4;
-        kernel(1, 2) = 2;
-        kernel(2, 1) = 2;
+        kernel.at<double>(0, 1) = 2;
+        kernel.at<double>(1, 0) = 2;
+        kernel.at<double>(1, 1) = 4;
+        kernel.at<double>(1, 2) = 2;
+        kernel.at<double>(2, 1) = 2;
 
         kernel = kernel / (float)16.;
 
     }else if(QString::compare(filtername, QString("Filter 3"), Qt::CaseInsensitive) == 0){
 
         std::cout << "Filter 3" << std::endl;
-        kernel(0, 1) = 2;
-        kernel(1, 0) = 0;
-        kernel(1, 1) = 0;
-        kernel(1, 2) = 0;
-        kernel(2, 0) = -1;
-        kernel(2, 1) = -2;
-        kernel(2, 2) = -1;
+        kernel.at<double>(0, 1) = 2;
+        kernel.at<double>(1, 0) = 0;
+        kernel.at<double>(1, 1) = 0;
+        kernel.at<double>(1, 2) = 0;
+        kernel.at<double>(2, 0) = -1;
+        kernel.at<double>(2, 1) = -2;
+        kernel.at<double>(2, 2) = -1;
     }else if(QString::compare(filtername, QString("SOBEL_X"), Qt::CaseInsensitive) == 0){
 
         std::cout << "Filter SOBEL X" << std::endl;
-        kernel(0, 1) = 2;
-        kernel(1, 0) = 0;
-        kernel(1, 1) = 0;
-        kernel(1, 2) = 0;
-        kernel(2, 0) = -1;
-        kernel(2, 1) = -2;
-        kernel(2, 2) = -1;
+        kernel.at<double>(0, 1) = 2;
+        kernel.at<double>(1, 0) = 0;
+        kernel.at<double>(1, 1) = 0;
+        kernel.at<double>(1, 2) = 0;
+        kernel.at<double>(2, 0) = -1;
+        kernel.at<double>(2, 1) = -2;
+        kernel.at<double>(2, 2) = -1;
     }else if(QString::compare(filtername, QString("SOBEL_Y"), Qt::CaseInsensitive) == 0){
 
         std::cout << "Filter SOBEL Y" << std::endl;
-        kernel(0, 1) = 0;
-        kernel(0, 2) = -1;
-        kernel(1, 0) = 2;
-        kernel(1, 1) = 0;
-        kernel(1, 2) = -2;
-        kernel(2, 1) = 0;
-        kernel(2, 2) = -1;
+        kernel.at<double>(0, 1) = 0;
+        kernel.at<double>(0, 2) = -1;
+        kernel.at<double>(1, 0) = 2;
+        kernel.at<double>(1, 1) = 0;
+        kernel.at<double>(1, 2) = -2;
+        kernel.at<double>(2, 1) = 0;
+        kernel.at<double>(2, 2) = -1;
     }
 
     std::cout << kernel << std::endl;
 //    filter2D(src, dst, -1, kernel);
 
-    Mat_<double> dstMat = src.getMat_();
-    Mat_<double> kopie = src.getMat_();
+    Mat dstMat = src.getMat();
+    Mat kopie = src.getMat();
 
 
 //    cout << kopie << endl << endl;
@@ -340,7 +338,7 @@ void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filternam
     for(; i < dstMat.rows; i++){
         int j = 0;
         for(; j < dstMat.cols; j++){
-            dstMat(i,j) = faltePixel(kopie, i, j, kernel, k);
+            dstMat.at<double>(i,j) = faltePixel(kopie, i, j, kernel, k);
         }
         if(i == 0) cout << "j=" << j << endl;
     }
@@ -350,24 +348,17 @@ void ImageProcessing::faltung(InputArray src, OutputArray dst, QString filternam
     dstMat.copyTo(dst);
 }
 
-double ImageProcessing::faltePixel(Mat_<double> &I, int y_pos, int x_pos, Mat_<double>& kernel, int k){
+double ImageProcessing::faltePixel(Mat &I, int y_pos, int x_pos, Mat& kernel, int k){
     double result = 0.;
-    cout << "x = " << x_pos << "  y = " << y_pos << endl;
-    cout << "\tpixel_new = ";
-
 
     for(int v = (-1)*(k/2) ; v <= k/2; v++){
         for(int u = (-1)*(k/2); u <= k/2; u++){
             if(x_pos + u >= 0 && y_pos + v >= 0)
             {
-                cout << I(y_pos + v, x_pos + u) << " * " << kernel((k/2) + v, (k/2) + u) << " + ";
-                result += I(y_pos + v, x_pos + u) * kernel((k/2) + v, (k/2) + u);
+                result += I.at<double>(y_pos + v, x_pos + u) * kernel.at<double>((k/2) + v, (k/2) + u);
             }
         }
     }
-
-
-    cout << " = " << result<< endl;
 
     return result;
 }

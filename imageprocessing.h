@@ -1,9 +1,9 @@
 #ifndef IMAGEPROCESSING_H
 #define IMAGEPROCESSING_H
 
-#include <core.hpp>
-#include <highgui.hpp>
-#include <imgproc.hpp>
+#include <core/core.hpp>
+#include <highgui/highgui.hpp>
+#include <imgproc/imgproc.hpp>
 
 #include <string>
 #include <iostream>
@@ -35,7 +35,7 @@ public:
 
 
 private:
-    static double faltePixel(Mat_<double>& I, int x_pos, int y_pos, Mat_<double>& kernel, int kernelSize);
+    static double faltePixel(Mat& I, int x_pos, int y_pos, Mat& kernel, int kernelSize);
 
 };
 

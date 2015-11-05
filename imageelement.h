@@ -5,9 +5,9 @@
 #include <QPainter>
 
 
-#include <core.hpp>
-#include <highgui.hpp>
-#include <imgproc.hpp>
+#include <core/core.hpp>
+#include <highgui/highgui.hpp>
+#include <imgproc/imgproc.hpp>
 
 #include <string>
 

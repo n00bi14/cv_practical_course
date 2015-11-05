@@ -10,11 +10,11 @@ QT += widgets
 TARGET = Bildverarbeitung
 TEMPLATE = app
 
-INCLUDEPATH += /usr/local/include/opencv2\
-                /usr/local/include/opencv
+INCLUDEPATH += /usr/include/opencv2\
+                /usr/include/opencv
 
 LIBS += -L/usr/local/lib/
-LIBS += -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc
+LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_features2d
 
 CONFIG += console
 
