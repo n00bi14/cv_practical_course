@@ -362,3 +362,100 @@ double ImageProcessing::faltePixel(Mat &I, int y_pos, int x_pos, Mat& kernel, in
 
     return result;
 }
+
+
+void ImageProcessing::detectSURFMatches(Mat& src, vector<KeyPoint>& keypoints, Mat& descriptor){
+    int minHessian = 400;
+    SURF surf( minHessian );
+    surf( src, Mat(), keypoints, descriptor);
+
+}
+
+void ImageProcessing::matchDescriptors(Mat& src1, Mat& src2, Mat& dst, vector<DMatch>& matches, QString matcher,
+                                       vector<KeyPoint>& keypoints_1, vector<KeyPoint>& keypoints_2, Mat& descriptor_1, Mat& descriptor_2){
+
+    if(QString::compare(matcher, QString("BF"), Qt::CaseInsensitive) == 0)
+    {
+        BFMatcher matcher(NORM_L2, false );
+        matcher.match( descriptor_1, descriptor_2, matches );
+        drawMatches( src1, keypoints_1, src2, keypoints_2, matches, dst );
+    }else if (QString::compare(matcher, QString("FB"), Qt::CaseInsensitive) == 0){
+//        FlannBasedMatcher matcher;
+//        matcher.match( descriptor_1, descriptor_2, matches );
+//        drawMatches( src1, keypoints_1, src2, keypoints_2, matches, dst );
+    }
+}
+
+void ImageProcessing::findGoodMatches(Mat& I, vector<DMatch>& matches, vector<KeyPoint>& keypoints_obj, vector<KeyPoint>& keypoints_scene,
+                                      vector<Point2f>& obj, vector<Point2f>& scene, vector<DMatch>& good_matches){
+    double max_dist = 0; double min_dist = 100;
+
+    //-- Quick calculation of max and min distances between keypoints
+    for( int i = 0; i < I.rows; i++ )
+    { double dist = matches[i].distance;
+     if( dist < min_dist ) min_dist = dist;
+     if( dist > max_dist ) max_dist = dist;
+    }
+
+    printf("-- Max dist : %f \n", max_dist );
+    printf("-- Min dist : %f \n", min_dist );
+
+
+    for( int i = 0; i < I.rows; i++ )
+    { if( matches[i].distance < 3*min_dist )
+      { good_matches.push_back( matches[i]); }
+    }
+
+
+    for( int i = 0; i < good_matches.size(); i++ )
+    {
+        //-- Get the keypoints from the good matches
+        obj.push_back( keypoints_obj[ good_matches[i].queryIdx ].pt );
+        scene.push_back( keypoints_scene[ good_matches[i].trainIdx ].pt );
+    }
+}
+
+void ImageProcessing::stitchTwoImages(Mat& L, Mat& R, Mat& dst){
+    Mat img1, img2;
+    cvtColor(L, img1, CV_RGB2GRAY);
+    cvtColor(R, img2, CV_RGB2GRAY);
+
+
+    vector<KeyPoint> keypoints_orig, keypoints_processed;
+    vector<DMatch> matches;
+    Mat descriptors_orig, descriptors_processed;
+    Mat img_matches;
+
+
+    ImageProcessing::detectSURFMatches(img1, keypoints_orig, descriptors_orig);
+    ImageProcessing::detectSURFMatches(img2, keypoints_processed, descriptors_processed);
+    ImageProcessing::matchDescriptors(img1, img2, img_matches, matches, QString("BF"), keypoints_orig, keypoints_processed, descriptors_orig, descriptors_processed);
+
+
+    vector<Point2f> obj;
+    vector<Point2f> scene;
+    vector<DMatch> good_matches;
+
+    ImageProcessing::findGoodMatches(img2, matches, keypoints_orig, keypoints_processed, obj, scene, good_matches);
+
+    drawMatches( img1, keypoints_orig, img2, keypoints_processed,
+                good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
+                vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+
+
+    Mat H = findHomography( obj, scene, CV_RANSAC);
+
+    //warpPerspective( img_matches, warp_dst, H, warp_dst.size() );
+    warpPerspective(R,dst,H,cv::Size(L.cols+R.cols,L.rows));
+//    dst = getPerspectiveTransform(L,R);
+
+
+    Mat left(dst, Rect(0,0,L.cols,L.rows));
+    L.copyTo(left);
+
+    KeyPoint pointL = keypoints_orig[good_matches[0].queryIdx];
+    KeyPoint pointR = keypoints_processed[good_matches[0].trainIdx];
+
+    Mat right(dst, Rect(pointL.pt.x-pointR.pt.x, 0, R.cols, R.rows));
+    R.copyTo(right);
+}

@@ -49,8 +49,6 @@ void ImageElement::showImageElement()
 
     int scaleTo = (this->size().width() < this->size().height()) ? this->size().width() : this->size().height();
 
-    qDebug() << this->size().width() << "\t" << this->size().height();
-
     if(_qimage.width() < _qimage.height())
         _qimage = _qimage.scaledToHeight(scaleTo);
     else
@@ -58,9 +56,6 @@ void ImageElement::showImageElement()
 
     float cvScaleFactor = float(scaleTo) / ((_cvImage.cols < _cvImage.rows) ? _cvImage.rows : _cvImage.cols);
     cv::resize(_cvImage, _cvImage, cv::Size(int(_cvImage.cols * cvScaleFactor), int(_cvImage.rows * cvScaleFactor)));
-
-//    qDebug() << this->heading.c_str() << " with: ";
-//    qDebug() << &(this->_cvImage) << " @ " << this->filename.c_str();
 
     repaint();
 }

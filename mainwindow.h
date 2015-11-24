@@ -4,16 +4,31 @@
 #include <QDebug>
 #include <QMainWindow>
 #include <QMessageBox>
+
 #include <string>
+#include <queue>
+
 #include "challangeone.h"
 #include "challangetwo.h"
 #include "challangethree.h"
 #include "challangefour.h"
 #include "challangefive.h"
 
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/nonfree/nonfree.hpp"
+#include "opencv2/calib3d/calib3d.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
+#include "opencv2/stitching/stitcher.hpp"
+
 namespace Ui {
 class MainWindow;
 }
+
+using namespace std;
 
 class MainWindow : public QMainWindow
 {
@@ -35,6 +50,7 @@ private:
     void executeAufgabe3();
     void executeAufgabe4();
     void executeAufgabe5();
+    void executeAufgabe6();
     void exit();
 };
 

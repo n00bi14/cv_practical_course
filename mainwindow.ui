@@ -131,6 +131,19 @@
      <string>Aufgabe 5</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btn_aufgabe6">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>70</y>
+      <width>99</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Aufgabe 6</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

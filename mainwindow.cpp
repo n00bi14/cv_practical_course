@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QPushButton* btn_aufgabe3 = findChild<QPushButton*>("btn_aufgabe3");
     QPushButton* btn_aufgabe4 = findChild<QPushButton*>("btn_aufgabe4");
     QPushButton* btn_aufgabe5 = findChild<QPushButton*>("btn_aufgabe5");
+    QPushButton* btn_aufgabe6 = findChild<QPushButton*>("btn_aufgabe6");
     QObject::connect(btn_aufgabe2a, SIGNAL (clicked()), this, SLOT (executeAufgabe2a()));
     QObject::connect(btn_aufgabe2b, SIGNAL (clicked()), this, SLOT (executeAufgabe2b()));
     QObject::connect(btn_aufgabe2c, SIGNAL (clicked()), this, SLOT (executeAufgabe2c()));
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(btn_aufgabe3, SIGNAL (clicked()), this, SLOT (executeAufgabe3()));
     QObject::connect(btn_aufgabe4, SIGNAL (clicked()), this, SLOT (executeAufgabe4()));
     QObject::connect(btn_aufgabe5, SIGNAL (clicked()), this, SLOT (executeAufgabe5()));
+    QObject::connect(btn_aufgabe6, SIGNAL (clicked()), this, SLOT (executeAufgabe6()));
 
 
     QPushButton* btn_exit = findChild<QPushButton*>("btn_exit");
@@ -128,6 +130,64 @@ void MainWindow::executeAufgabe5()
 
     ChallangeFive co(filename_orig, filename_proc, resultPath);
     co.exec();
+}
+
+void MainWindow::executeAufgabe6()
+{
+  //    vector<Mat> vImg;
+  //    Mat rImg;
+
+  //    vImg.push_back( imread("Images/Aufgabe6/1.jpg") );
+  //    vImg.push_back( imread("Images/Aufgabe6/2.jpg") );
+  //    vImg.push_back( imread("Images/Aufgabe6/3.jpg") );
+  //    vImg.push_back( imread("Images/Aufgabe6/4.jpg") );
+  //    vImg.push_back( imread("Images/Aufgabe6/5.jpg") );
+
+
+  //    Stitcher stitcher = Stitcher::createDefault();
+  //    stitcher.stitch(vImg, rImg);
+  //    imwrite("Images/Aufgabe6/panorama2.jpg", rImg);
+
+
+
+//    //1. Panorama
+//    Mat image1 = imread("Images/Aufgabe6/6.jpg");
+//    Mat image2 = imread("Images/Aufgabe6/7.jpg");
+
+//    Mat warp_dst;
+
+//    ImageProcessing::stitchTwoImages(image1, image2, warp_dst);
+
+//    imwrite("Images/Aufgabe6/panorama1_2.jpg", warp_dst);
+
+
+    //2. Panorama
+
+    vector<Mat> vImg;
+    Mat rImg;
+
+    vImg.push_back( imread("Images/Aufgabe6/1.jpg") );
+    vImg.push_back( imread("Images/Aufgabe6/2.jpg") );
+    vImg.push_back( imread("Images/Aufgabe6/3.jpg") );
+    vImg.push_back( imread("Images/Aufgabe6/4.jpg") );
+    vImg.push_back( imread("Images/Aufgabe6/5.jpg") );
+    vImg.push_back( imread("Images/Aufgabe6/6.jpg") );
+    vImg.push_back( imread("Images/Aufgabe6/7.jpg") );
+
+    ImageProcessing::stitchTwoImages(vImg[3], vImg[4], rImg);
+
+    if(vImg.size() > 2){
+        Mat dst;
+        for(int i = 5; i < vImg.size(); i++){
+            cout << "i=" << i << endl;
+            ImageProcessing::stitchTwoImages(rImg, vImg[i], dst);
+            dst.copyTo(rImg);
+        }
+        imwrite("Images/Aufgabe6/panorama2_2.jpg", rImg);
+    }
+
+    cout << "Aufgabe 6 fertig" << endl;
+//    imshow("", img_matches);
 }
 
 

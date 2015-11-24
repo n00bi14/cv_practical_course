@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1116</width>
-    <height>481</height>
+    <height>954</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +89,26 @@
    </property>
    <property name="wordWrap">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="ImageElement" name="img_matched" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>480</y>
+     <width>511</width>
+     <height>461</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="ImageElement" name="img_rotated" native="true">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>480</y>
+     <width>511</width>
+     <height>461</height>
+    </rect>
    </property>
   </widget>
  </widget>
